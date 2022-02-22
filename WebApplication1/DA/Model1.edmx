@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LearnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="dept">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="emp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="did" Type="int" />
+          <Property Name="adress" Type="varchar" MaxLength="50" />
+          <Property Name="gender" Type="int" />
+        </EntityType>
+        <Association Name="FK_emp_dept1">
+          <End Role="dept" Type="Self.dept" Multiplicity="0..1" />
+          <End Role="emp" Type="Self.emp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dept">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="emp">
+              <PropertyRef Name="did" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="inserting" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="adress" Type="varchar" Mode="In" />
+          <Parameter Name="did" Type="int" Mode="In" />
+        </Function>
+        <Function Name="mmd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idd" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="LearnModelStoreContainer">
+          <EntitySet Name="dept" EntityType="Self.dept" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="emp" EntityType="Self.emp" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_emp_dept1" Association="Self.FK_emp_dept1">
+            <End Role="dept" EntitySet="dept" />
+            <End Role="emp" EntitySet="emp" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LearnModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="dept">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="emps" Relationship="Self.FK_emp_dept1" FromRole="dept" ToRole="emp" />
+        </EntityType>
+        <EntityType Name="emp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="did" Type="Int32" />
+          <Property Name="adress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="gender" Type="LearnModel.gender" />
+          <NavigationProperty Name="dept" Relationship="Self.FK_emp_dept1" FromRole="emp" ToRole="dept" />
+        </EntityType>
+        <Association Name="FK_emp_dept1">
+          <End Role="dept" Type="Self.dept" Multiplicity="0..1" />
+          <End Role="emp" Type="Self.emp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dept">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="emp">
+              <PropertyRef Name="did" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LearnEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="depts" EntityType="Self.dept" />
+          <EntitySet Name="emps" EntityType="Self.emp" />
+          <AssociationSet Name="FK_emp_dept1" Association="Self.FK_emp_dept1">
+            <End Role="dept" EntitySet="depts" />
+            <End Role="emp" EntitySet="emps" />
+          </AssociationSet>
+          <FunctionImport Name="inserting">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="adress" Mode="In" Type="String" />
+            <Parameter Name="did" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="mmd" ReturnType="Collection(LearnModel.mmd_Result)">
+            <Parameter Name="idd" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="mmd_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="did" Nullable="true" />
+          <Property Type="String" Name="adress" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="gender" Nullable="true" />
+        </ComplexType>
+        <EnumType Name="gender">
+          <Member Name="male" Value="1" />
+          <Member Name="female" Value="2" />
+        </EnumType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LearnModelStoreContainer" CdmEntityContainer="LearnEntities1">
+          <EntitySetMapping Name="depts">
+            <EntityTypeMapping TypeName="LearnModel.dept">
+              <MappingFragment StoreEntitySet="dept">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="emps">
+            <EntityTypeMapping TypeName="LearnModel.emp">
+              <MappingFragment StoreEntitySet="emp">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="did" ColumnName="did" />
+                <ScalarProperty Name="adress" ColumnName="adress" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="inserting" FunctionName="LearnModel.Store.inserting" />
+          <FunctionImportMapping FunctionImportName="mmd" FunctionName="LearnModel.Store.mmd">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LearnModel.mmd_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="did" ColumnName="did" />
+                <ScalarProperty Name="adress" ColumnName="adress" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
