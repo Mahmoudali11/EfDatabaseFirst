@@ -47,7 +47,7 @@ namespace WebApplication1.BL
           return sete.ToList();
         }
 
-        public TEntity GetById(params int[] id)
+        public TEntity GetById(params object[] id)
         {
              return  sete.Find(id);
         }
