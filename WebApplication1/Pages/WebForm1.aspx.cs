@@ -16,8 +16,15 @@ namespace WebApplication1.Pages
 
                  SingleTone singleTone = new SingleTone();
 
+                SingleTone singleTone2 = new SingleTone();
 
-               singleTone.MyEmployee.Update(new DA.emp { Id = 5, Name = "Mahmoud Selim...", adress = "now in cairo" ,did=3,gender=DA.gender.male});
+              var x=  singleTone.MyEmployee.
+                    GetById(5);
+
+
+                var y = singleTone2.MyDepartment.GetById(1);
+                x.dept = y;
+                singleTone.MyEmployee.Update(x);
                 myg.DataSource = singleTone.MyEmployee.GetByGender(1);
                 myg.DataBind();
 
@@ -27,4 +34,4 @@ namespace WebApplication1.Pages
 
         }
     }
-}
+} 

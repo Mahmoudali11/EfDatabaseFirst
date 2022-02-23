@@ -8,10 +8,10 @@ namespace WebApplication1.BL
 {
     public class SingleTone
     {
+        
 
 
-
-      static  LearnEntities1 context=new LearnEntities1();
+    private static  LearnEntities1 context=new LearnEntities1();
 
 
         public Employee MyEmployee

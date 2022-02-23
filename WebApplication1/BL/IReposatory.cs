@@ -18,7 +18,7 @@ namespace WebApplication1.BL
 
 
         TEntity Add(TEntity entity);
-        TEntity GetById(params int[] id);
+        TEntity GetById(params object[] id);
 
 
     }
